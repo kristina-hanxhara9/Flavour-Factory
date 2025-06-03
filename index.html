@@ -25,8 +25,18 @@
     <!-- Custom Styles -->
     <link rel="stylesheet" href="styles.css">
     
-    <!-- Google APIs for Cloud Backup -->
-    <script src="https://apis.google.com/js/api.js"></script>
+    <!-- Configuration -->
+    <script src="config.js"></script>
+    
+    <!-- Google APIs for Cloud Backup (loaded conditionally) -->
+    <script>
+        // Only load Google APIs if configured
+        if (window.APP_CONFIG && window.APP_CONFIG.GOOGLE_CLIENT_ID) {
+            const script = document.createElement('script');
+            script.src = 'https://apis.google.com/js/api.js';
+            document.head.appendChild(script);
+        }
+    </script>
 </head>
 <body>
     <!-- Loading Screen -->

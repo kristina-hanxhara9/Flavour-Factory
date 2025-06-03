@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate App Icons</title>
+</head>
+<body>
+    <h1>Bakery Scanner Icon Generator</h1>
+    <p>Click each link to download the icon:</p>
+    
+    <div id="icons"></div>
+    
+    <button onclick="downloadAll()">Download All Icons</button>
+    
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        const iconContainer = document.getElementById('icons');
+        
+        // Create canvas for each size
+        sizes.forEach(size => {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Background - bakery theme color
+            ctx.fillStyle = '#FFF8DC';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Border
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = size * 0.02;
+            ctx.strokeRect(size * 0.05, size * 0.05, size * 0.9, size * 0.9);
+            
+            // Draw bread emoji
+            ctx.font = `${size * 0.5}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🥐', size / 2, size / 2);
+            
+            // Convert to blob and create download link
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.download = `icon-${size}x${size}.png`;
+                link.href = url;
+                link.textContent = `icon-${size}x${size}.png`;
+                link.style.display = 'block';
+                link.style.margin = '10px';
+                iconContainer.appendChild(link);
+            });
+        });
+        
+        function downloadAll() {
+            const links = document.querySelectorAll('a');
+            links.forEach((link, index) => {
+                setTimeout(() => link.click(), index * 200);
+            });
+        }
+    </script>
+</body>
+</html>

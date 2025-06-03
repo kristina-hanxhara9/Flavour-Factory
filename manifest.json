@@ -9,104 +9,13 @@
   "orientation": "any",
   "icons": [
     {
-      "src": "assets/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icon-512x512.png",
+      "src": "data:image/svg+xml,%3Csvg width='512' height='512' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='512' height='512' fill='%23FFF8DC'/%3E%3Ctext x='256' y='280' font-size='200' text-anchor='middle' fill='%238B4513'%3E🥐%3C/text%3E%3C/svg%3E",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ],
   "categories": ["business", "productivity", "utilities"],
-  "screenshots": [
-    {
-      "src": "assets/screenshot-1.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "label": "Skaneri i produkteve"
-    },
-    {
-      "src": "assets/screenshot-2.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "label": "Trajnimi i produkteve"
-    },
-    {
-      "src": "assets/screenshot-3.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "label": "Paneli i shitjeve"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Skano produkt",
-      "short_name": "Skano",
-      "url": "/?tab=scanner",
-      "icons": [{
-        "src": "assets/scan-icon.png",
-        "sizes": "96x96"
-      }]
-    },
-    {
-      "name": "Trajno produkt të ri",
-      "short_name": "Trajno",
-      "url": "/?tab=training",
-      "icons": [{
-        "src": "assets/train-icon.png",
-        "sizes": "96x96"
-      }]
-    },
-    {
-      "name": "Shiko shitjet",
-      "short_name": "Shitjet",
-      "url": "/?tab=sales",
-      "icons": [{
-        "src": "assets/sales-icon.png",
-        "sizes": "96x96"
-      }]
-    }
-  ],
   "prefer_related_applications": false,
   "related_applications": []
 }

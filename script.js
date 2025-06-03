@@ -345,6 +345,12 @@ class BakeryScanner {
         
         // Cloud backup
         document.getElementById('setupCloudBackup').addEventListener('click', async () => {
+            if (!window.APP_CONFIG || !window.APP_CONFIG.GOOGLE_CLIENT_ID) {
+                // Open setup guide
+                window.open('setup-google-drive-printer.html', '_blank');
+                return;
+            }
+            
             if (this.cloudBackup) {
                 await this.cloudBackup.initialize();
                 const authenticated = await this.cloudBackup.authenticate();

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfigurimi i Google Drive dhe Printer - Super e Lehtë!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #FFF8DC;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #8B4513;
+            text-align: center;
+        }
+        .setup-card {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+        .big-button {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin: 15px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        .big-button:hover {
+            background-color: #45a049;
+        }
+        .step {
+            background-color: #f0f8ff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #2196F3;
+        }
+        .warning {
+            background-color: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #ffc107;
+            margin: 20px 0;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        .emoji {
+            font-size: 48px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Konfigurimi Super i Lehtë!</h1>
+    
+    <div class="setup-card">
+        <h2>☁️ GOOGLE DRIVE (FALAS - 0 Lek/muaj)</h2>
+        <div class="emoji">📁</div>
+        
+        <div class="warning">
+            <strong>🎉 LAJM I MIRË:</strong> Google Drive është 100% FALAS deri në 15GB! 
+            Mjafton për 10+ vite të dhëna!
+        </div>
+
+        <h3>Konfiguro në 3 Minuta:</h3>
+        
+        <div class="step">
+            <h4>Hapi 1: Hap Google Cloud Console</h4>
+            <a href="https://console.cloud.google.com" target="_blank" class="big-button">
+                Kliko Këtu për Google Cloud
+            </a>
+            <p>Logohu me llogarinë tënde Gmail</p>
+        </div>
+
+        <div class="step">
+            <h4>Hapi 2: Krijo Projekt të Ri (FALAS)</h4>
+            <p>1. Kliko "Select a project" → "New Project"</p>
+            <p>2. Emri: <code>bakery-scanner</code></p>
+            <p>3. Kliko "Create"</p>
+        </div>
+
+        <div class="step">
+            <h4>Hapi 3: Aktivizo Google Drive API</h4>
+            <p>1. Kliko "Enable APIs and Services"</p>
+            <p>2. Kërko: <code>Google Drive API</code></p>
+            <p>3. Kliko mbi të → "Enable"</p>
+        </div>
+
+        <div class="step">
+            <h4>Hapi 4: Krijo Kredencialet (Client ID)</h4>
+            <p>1. Shko te "Credentials" → "Create Credentials" → "OAuth client ID"</p>
+            <p>2. Application type: <strong>Web application</strong></p>
+            <p>3. Name: <code>Bakery Scanner</code></p>
+            <p>4. Authorized JavaScript origins:</p>
+            <code>http://localhost:8000</code><br>
+            <code>https://YOUR-USERNAME.github.io</code>
+            <p>5. Kliko "Create"</p>
+            <p>6. Kopjo këto:</p>
+            <code>Client ID: [do të shfaqet këtu]</code><br>
+            <code>API Key: [krijo nga "Create Credentials" → "API Key"]</code>
+        </div>
+
+        <div class="step">
+            <h4>Hapi 5: Vendosi në Aplikacion</h4>
+            <p>Hap file <code>config.js</code> dhe vendos:</p>
+            <code>
+                GOOGLE_CLIENT_ID: 'vendos-client-id-këtu',<br>
+                GOOGLE_API_KEY: 'vendos-api-key-këtu'
+            </code>
+        </div>
+
+        <div class="success">
+            ✅ GATI! Tani mund të bësh backup automatik në Google Drive!
+        </div>
+    </div>
+
+    <div class="setup-card">
+        <h2>🖨️ LIDHJA E PRINTER BLUETOOTH</h2>
+        <div class="emoji">🖨️</div>
+        
+        <h3>Printerët e Rekomanduar (Termik):</h3>
+        <ul>
+            <li><strong>MUNBYN</strong> - 3,000-5,000 Lek</li>
+            <li><strong>RONGTA</strong> - 4,000-6,000 Lek</li>
+            <li><strong>Star Micronics</strong> - 8,000-12,000 Lek</li>
+        </ul>
+
+        <h3>Si të Lidhësh:</h3>
+        
+        <div class="step">
+            <h4>Në Telefon/Tablet:</h4>
+            <p>1. Ndiz printer dhe Bluetooth</p>
+            <p>2. Hap Settings → Bluetooth</p>
+            <p>3. Gjej printer (p.sh. "MUNBYN-001")</p>
+            <p>4. Kliko për të lidhur</p>
+            <p>5. Hap aplikacionin → Settings → Connect Printer</p>
+        </div>
+
+        <div class="step">
+            <h4>Në Kompjuter:</h4>
+            <p>1. Duhet Chrome ose Edge browser</p>
+            <p>2. Sigurohu që je në HTTPS (jo HTTP)</p>
+            <p>3. Kliko "Lidh Printer Bluetooth"</p>
+            <p>4. Zgjidh printer nga lista</p>
+        </div>
+
+        <div class="warning">
+            <strong>Kujdes:</strong> Bluetooth funksionon VETËM në:
+            <ul>
+                <li>HTTPS (jo HTTP)</li>
+                <li>Chrome ose Edge browser</li>
+                <li>Android/Windows (iOS ka kufizime)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="setup-card">
+        <h2>❌ ZGJIDHJA E PROBLEMEVE</h2>
+        
+        <h3>Problem: "Permission dismissed" për kamerën</h3>
+        <div class="step">
+            <p><strong>Zgjidhje:</strong></p>
+            <p>1. Kliko ikonën e "lakut" pranë URL</p>
+            <p>2. Gjej "Camera" → Ndrysho në "Allow"</p>
+            <p>3. Rifresko faqen (F5)</p>
+        </div>
+
+        <h3>Problem: Ikonat nuk shfaqen (404)</h3>
+        <div class="step">
+            <p><strong>Zgjidhje e shpejtë:</strong></p>
+            <button onclick="createIcons()" class="big-button">
+                Krijo Ikonat Automatikisht
+            </button>
+        </div>
+
+        <h3>Problem: Google Drive nuk lidhet</h3>
+        <div class="step">
+            <p>Kontrollo që ke vendosur Client ID dhe API Key në <code>config.js</code></p>
+            <p>Sigurohu që je në HTTPS ose localhost</p>
+        </div>
+    </div>
+
+    <div class="setup-card" style="background-color: #E8F5E9;">
+        <h2 class="success">🎉 Përfundove!</h2>
+        <p style="text-align: center; font-size: 20px;">
+            Tani ke:<br>
+            ✅ Backup automatik FALAS<br>
+            ✅ Printer profesional<br>
+            ✅ Sistem komplet enterprise<br>
+            <br>
+            <strong>Kosto totale: 0 Lek/muaj!</strong>
+        </p>
+    </div>
+
+    <script>
+        function createIcons() {
+            // Create simple icon as data URL
+            const iconSvg = `
+                <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="512" height="512" fill="#FFF8DC"/>
+                    <text x="256" y="280" font-size="200" text-anchor="middle" fill="#8B4513">🥐</text>
+                </svg>
+            `;
+            
+            const iconDataUrl = 'data:image/svg+xml;base64,' + btoa(iconSvg);
+            
+            // Create a download link
+            const a = document.createElement('a');
+            a.href = iconDataUrl;
+            a.download = 'icon.svg';
+            a.click();
+            
+            alert('Ikona u krijua! Vendose në dosjen assets/');
+        }
+    </script>
+</body>
+</html>

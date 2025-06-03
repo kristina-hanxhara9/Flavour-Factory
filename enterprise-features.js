@@ -210,22 +210,40 @@ class CloudBackup {
     
     // Initialize Google Drive API (FREE)
     async initialize() {
+        // Check if API keys are configured
+        if (!window.APP_CONFIG || !window.APP_CONFIG.GOOGLE_CLIENT_ID) {
+            console.log('Google Drive not configured. Please set up API keys.');
+            if (window.app) {
+                window.app.showToast('Google Drive nuk është konfiguruar ende. Kliko "Konfiguro Google Drive" për udhëzime.', 'warning');
+            }
+            return false;
+        }
+        
         // Google Drive offers 15GB free storage
         // Cost: $0/month for up to 15GB
         
-        const script = document.createElement('script');
-        script.src = 'https://apis.google.com/js/api.js';
-        script.onload = () => this.handleClientLoad();
-        document.body.appendChild(script);
+        if (typeof gapi === 'undefined') {
+            console.log('Google API not loaded yet. Loading...');
+            const script = document.createElement('script');
+            script.src = 'https://apis.google.com/js/api.js';
+            script.onload = () => this.handleClientLoad();
+            document.body.appendChild(script);
+        } else {
+            this.handleClientLoad();
+        }
     }
     
     handleClientLoad() {
         gapi.load('client:auth2', () => {
             gapi.client.init({
-                apiKey: 'YOUR_API_KEY', // Free from Google Cloud Console
-                clientId: 'YOUR_CLIENT_ID', // Free from Google Cloud Console
+                apiKey: window.APP_CONFIG.GOOGLE_API_KEY,
+                clientId: window.APP_CONFIG.GOOGLE_CLIENT_ID,
                 discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
                 scope: 'https://www.googleapis.com/auth/drive.file'
+            }).then(() => {
+                console.log('Google API initialized successfully');
+            }).catch(error => {
+                console.error('Google API initialization failed:', error);
             });
         });
     }
@@ -233,12 +251,23 @@ class CloudBackup {
     // Authenticate user
     async authenticate() {
         try {
+            if (typeof gapi === 'undefined' || !gapi.auth2) {
+                throw new Error('Google API not loaded. Please configure API keys first.');
+            }
+            
             const GoogleAuth = gapi.auth2.getAuthInstance();
+            if (!GoogleAuth) {
+                throw new Error('Google Auth not initialized. Please check API configuration.');
+            }
+            
             await GoogleAuth.signIn();
             this.isAuthenticated = true;
             return true;
         } catch (error) {
             console.error('Authentication failed:', error);
+            if (window.app) {
+                window.app.showToast('Autentifikimi dështoi. Kontrolloni konfigurimin.', 'error');
+            }
             return false;
         }
     }

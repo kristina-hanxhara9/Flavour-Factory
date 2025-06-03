@@ -54,7 +54,7 @@ class CameraHandler {
             console.log('Camera started successfully');
             
             // Start continuous scanning if enabled
-            if (window.app && window.app.settings.continuousScan) {
+            if (window.app && window.app.settings && window.app.settings.continuousScan) {
                 this.startContinuousScanning();
             }
             
@@ -95,7 +95,7 @@ class CameraHandler {
         await this.startCamera();
         
         // Show notification
-        if (window.app) {
+        if (window.app && typeof window.app.showToast === 'function') {
             window.app.showToast(`Kamerat u ndërrua në ${this.currentCamera === 'user' ? 'përpara' : 'mbrapa'}`, 'info');
         }
     }
@@ -193,11 +193,16 @@ class CameraHandler {
             message = 'Cilësimet e kamerës nuk mbështeten nga pajisja juaj';
         }
         
-        if (window.app) {
-            window.app.showToast(message, 'error');
-        }
-        
+        // Show error in console
         console.error('Camera error:', error);
+        
+        // Show toast if app is available
+        if (window.app && typeof window.app.showToast === 'function') {
+            window.app.showToast(message, 'error');
+        } else {
+            // Fallback alert if app not ready
+            alert(message);
+        }
     }
     
     // Advanced camera features
