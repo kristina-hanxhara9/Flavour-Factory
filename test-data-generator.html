@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakery Scanner - Test Data Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #FFF8DC;
+        }
+        h1 {
+            color: #8B4513;
+            text-align: center;
+        }
+        .generator-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .product-card {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        button {
+            background-color: #D2691E;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #8B4513;
+        }
+        .instructions {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        #downloadLinks {
+            margin-top: 20px;
+        }
+        .download-link {
+            display: inline-block;
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🥐 Bakery Scanner - Test Data Generator</h1>
+    
+    <div class="instructions">
+        <h3>📋 Instructions:</h3>
+        <ol>
+            <li>Click "Generate Test Products" to create sample product images</li>
+            <li>Download the images using the links that appear</li>
+            <li>Use these images to test the training feature</li>
+            <li>You can also click on any canvas to download that specific image</li>
+        </ol>
+    </div>
+
+    <div class="generator-section">
+        <h2>Generate Test Product Images</h2>
+        <button onclick="generateAllProducts()">Generate Test Products</button>
+        <button onclick="clearAll()">Clear All</button>
+        
+        <div id="productGrid" class="product-grid"></div>
+        <div id="downloadLinks"></div>
+    </div>
+
+    <script>
+        // Test products with Albanian names
+        const testProducts = [
+            { name: 'Byrek me spinaq', emoji: '🥧', color: '#90EE90', category: 'byrek', price: 150 },
+            { name: 'Byrek me mish', emoji: '🥧', color: '#FFB6C1', category: 'byrek', price: 200 },
+            { name: 'Byrek me djathë', emoji: '🥧', color: '#FFFACD', category: 'byrek', price: 150 },
+            { name: 'Bukë e bardhë', emoji: '🍞', color: '#F5DEB3', category: 'bukë', price: 100 },
+            { name: 'Bukë integrale', emoji: '🍞', color: '#8B4513', category: 'bukë', price: 120 },
+            { name: 'Kroasan', emoji: '🥐', color: '#FFD700', category: 'bukë', price: 180 },
+            { name: 'Tortë çokollatë', emoji: '🎂', color: '#654321', category: 'torta', price: 2500 },
+            { name: 'Tortë frutash', emoji: '🎂', color: '#FF69B4', category: 'torta', price: 2800 },
+            { name: 'Ëmbëlsirë me krem', emoji: '🧁', color: '#FFC0CB', category: 'ëmbëlsira', price: 250 },
+            { name: 'Baklava', emoji: '🍯', color: '#DAA520', category: 'ëmbëlsira', price: 300 },
+            { name: 'Tulumba', emoji: '🍩', color: '#FF8C00', category: 'ëmbëlsira', price: 200 },
+            { name: 'Kafe ekspres', emoji: '☕', color: '#6F4E37', category: 'kafe', price: 100 }
+        ];
+
+        function generateProductImage(product, variation = 0) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 300;
+            canvas.height = 300;
+            const ctx = canvas.getContext('2d');
+
+            // Background with slight variations
+            const bgVariation = variation * 20;
+            ctx.fillStyle = product.color;
+            ctx.fillRect(0, 0, 300, 300);
+
+            // Add some texture/pattern
+            ctx.globalAlpha = 0.1;
+            for (let i = 0; i < 50; i++) {
+                ctx.fillStyle = variation % 2 ? '#000' : '#fff';
+                ctx.fillRect(
+                    Math.random() * 300,
+                    Math.random() * 300,
+                    Math.random() * 50,
+                    Math.random() * 50
+                );
+            }
+            ctx.globalAlpha = 1;
+
+            // Product emoji with variations
+            const size = 150 + variation * 10;
+            const rotation = (variation - 2) * 0.1;
+            
+            ctx.save();
+            ctx.translate(150, 150);
+            ctx.rotate(rotation);
+            ctx.font = `${size}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(product.emoji, 0, 0);
+            ctx.restore();
+
+            // Product name
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 20px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(product.name, 150, 260);
+
+            // Price
+            ctx.font = '18px Arial';
+            ctx.fillText(`${product.price} Lek`, 150, 285);
+
+            // Add timestamp to make each image unique
+            ctx.fillStyle = '#999';
+            ctx.font = '10px Arial';
+            ctx.fillText(`Var: ${variation + 1}`, 280, 290);
+
+            return canvas;
+        }
+
+        function generateAllProducts() {
+            const grid = document.getElementById('productGrid');
+            const downloadDiv = document.getElementById('downloadLinks');
+            grid.innerHTML = '';
+            downloadDiv.innerHTML = '<h3>Download Links:</h3>';
+
+            testProducts.forEach((product, index) => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product-card';
+                productDiv.innerHTML = `<h3>${product.name}</h3>`;
+
+                // Generate 5 variations of each product
+                for (let v = 0; v < 5; v++) {
+                    const canvas = generateProductImage(product, v);
+                    canvas.style.width = '100px';
+                    canvas.style.height = '100px';
+                    
+                    // Make canvas clickable to download
+                    canvas.onclick = function() {
+                        const link = document.createElement('a');
+                        link.download = `${product.name.replace(/ /g, '_')}_${v + 1}.png`;
+                        link.href = canvas.toDataURL();
+                        link.click();
+                    };
+                    
+                    productDiv.appendChild(canvas);
+                }
+
+                grid.appendChild(productDiv);
+
+                // Create download link for all variations
+                const downloadLink = document.createElement('a');
+                downloadLink.className = 'download-link';
+                downloadLink.textContent = product.name;
+                downloadLink.href = '#';
+                downloadLink.onclick = function(e) {
+                    e.preventDefault();
+                    // Download all variations
+                    for (let v = 0; v < 5; v++) {
+                        setTimeout(() => {
+                            const canvas = generateProductImage(product, v);
+                            const link = document.createElement('a');
+                            link.download = `${product.name.replace(/ /g, '_')}_${v + 1}.png`;
+                            link.href = canvas.toDataURL();
+                            link.click();
+                        }, v * 200);
+                    }
+                };
+                downloadDiv.appendChild(downloadLink);
+            });
+
+            // Add "Download All" button
+            const downloadAllBtn = document.createElement('button');
+            downloadAllBtn.textContent = 'Download All Images';
+            downloadAllBtn.style.display = 'block';
+            downloadAllBtn.style.marginTop = '20px';
+            downloadAllBtn.onclick = function() {
+                let delay = 0;
+                testProducts.forEach((product) => {
+                    for (let v = 0; v < 5; v++) {
+                        setTimeout(() => {
+                            const canvas = generateProductImage(product, v);
+                            const link = document.createElement('a');
+                            link.download = `${product.name.replace(/ /g, '_')}_${v + 1}.png`;
+                            link.href = canvas.toDataURL();
+                            link.click();
+                        }, delay);
+                        delay += 300;
+                    }
+                });
+            };
+            downloadDiv.appendChild(downloadAllBtn);
+        }
+
+        function clearAll() {
+            document.getElementById('productGrid').innerHTML = '';
+            document.getElementById('downloadLinks').innerHTML = '';
+        }
+
+        // Generate sample CSV
+        function generateCSV() {
+            const csv = [
+                ['Emri', 'Çmimi', 'Kategoria'],
+                ...testProducts.map(p => [p.name, p.price, p.category])
+            ].map(row => row.join(',')).join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'produktet_test.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Add CSV download button
+        window.onload = function() {
+            const csvBtn = document.createElement('button');
+            csvBtn.textContent = 'Download Test CSV';
+            csvBtn.onclick = generateCSV;
+            document.querySelector('.generator-section').insertBefore(csvBtn, document.getElementById('productGrid'));
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+{
+  "timestamp": "2025-06-03T10:00:00.000Z",
+  "version": "2.0",
+  "description": "Demo data for Bakery Scanner System - Use this to test the system with sample products and sales",
+  "businessInfo": {
+    "name": "Furra \"Bukë e Freskët\"",
+    "address": "Rruga Kryesore 123, Tiranë 1001",
+    "phone": "+355 69 123 4567",
+    "email": "info@bukefresket.al"
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "Kroasan me Vaj",
+      "price": 2.50,
+      "category": "pastry",
+      "description": "Brumë e përgatitur me vaj të freskët, e butë dhe e shijshme",
+      "allergens": ["gluten", "eggs", "dairy"],
+      "nutritionInfo": {
+        "calories": 280,
+        "fat": 16,
+        "carbs": 28,
+        "protein": 6
+      },
+      "trainedAt": "2025-06-01T08:00:00.000Z",
+      "photoCount": 18,
+      "trainingAccuracy": 0.92
+    },
+    {
+      "id": 2,
+      "name": "Bukë Integrale",
+      "price": 3.50,
+      "category": "bread",
+      "description": "Bukë e plotë me farëra, e shëndetshme dhe ushqyese",
+      "allergens": ["gluten"],
+      "nutritionInfo": {
+        "calories": 180,
+        "fat": 3,
+        "carbs": 32,
+        "protein": 8
+      },
+      "trainedAt": "2025-06-01T08:30:00.000Z",
+      "photoCount": 22,
+      "trainingAccuracy": 0.89
+    },
+    {
+      "id": 3,
+      "name": "Biskota me Çokollatë",
+      "price": 1.75,
+      "category": "cookie",
+      "description": "Biskota të bëra me dorë me çokollatë të mirë",
+      "allergens": ["gluten", "eggs", "dairy", "nuts"],
+      "nutritionInfo": {
+        "calories": 320,
+        "fat": 18,
+        "carbs": 38,
+        "protein": 4
+      },
+      "trainedAt": "2025-06-01T09:00:00.000Z",
+      "photoCount": 15,
+      "trainingAccuracy": 0.94
+    },
+    {
+      "id": 4,
+      "name": "Mafin me Boronicë",
+      "price": 2.25,
+      "category": "pastry",
+      "description": "Mafin i butë me boronicë të freskëta",
+      "allergens": ["gluten", "eggs", "dairy"],
+      "nutritionInfo": {
+        "calories": 250,
+        "fat": 12,
+        "carbs": 34,
+        "protein": 5
+      },
+      "trainedAt": "2025-06-01T09:30:00.000Z",
+      "photoCount": 20,
+      "trainingAccuracy": 0.88
+    },
+    {
+      "id": 5,
+      "name": "Torte Çokollatë",
+      "price": 4.50,
+      "category": "cake",
+      "description": "Copë torte çokollatë me krem të shijshëm",
+      "allergens": ["gluten", "eggs", "dairy"],
+      "nutritionInfo": {
+        "calories": 420,
+        "fat": 24,
+        "carbs": 48,
+        "protein": 6
+      },
+      "trainedAt": "2025-06-01T10:00:00.000Z",
+      "photoCount": 25,
+      "trainingAccuracy": 0.91
+    },
+    {
+      "id": 6,
+      "name": "Pretzel i Kripur",
+      "price": 2.00,
+      "category": "bread",
+      "description": "Pretzel tradicional i kripur dhe i butë",
+      "allergens": ["gluten"],
+      "nutritionInfo": {
+        "calories": 200,
+        "fat": 2,
+        "carbs": 38,
+        "protein": 7
+      },
+      "trainedAt": "2025-06-01T10:30:00.000Z",
+      "photoCount": 16,
+      "trainingAccuracy": 0.87
+    },
+    {
+      "id": 7,
+      "name": "Danish me Mollë",
+      "price": 3.25,
+      "category": "pastry",
+      "description": "Brumë e shtresëzuar me mbushje molle dhe kanellë",
+      "allergens": ["gluten", "eggs", "dairy"],
+      "nutritionInfo": {
+        "calories": 290,
+        "fat": 15,
+        "carbs": 36,
+        "protein": 5
+      },
+      "trainedAt": "2025-06-01T11:00:00.000Z",
+      "photoCount": 19,
+      "trainingAccuracy": 0.90
+    },
+    {
+      "id": 8,
+      "name": "Baguette Franceze",
+      "price": 3.00,
+      "category": "bread",
+      "description": "Bukë franceze tradicionale me kore të kristalizuar",
+      "allergens": ["gluten"],
+      "nutritionInfo": {
+        "calories": 160,
+        "fat": 1,
+        "carbs": 33,
+        "protein": 6
+      },
+      "trainedAt": "2025-06-01T11:30:00.000Z",
+      "photoCount": 21,
+      "trainingAccuracy": 0.93
+    }
+  ],
+  "sales": [
+    {
+      "id": 1001,
+      "saleNumber": "SALE-20250603-001",
+      "items": [
+        {
+          "id": 1,
+          "name": "Kroasan me Vaj",
+          "price": 2.50,
+          "quantity": 2,
+          "confidence": 0.92
+        },
+        {
+          "id": 3,
+          "name": "Biskota me Çokollatë", 
+          "price": 1.75,
+          "quantity": 3,
+          "confidence": 0.89
+        }
+      ],
+      "subtotal": 10.25,
+      "tax": 2.05,
+      "total": 12.30,
+      "timestamp": "2025-06-03T08:15:30.000Z",
+      "employee": "Ana Hoxha",
+      "shiftId": 301
+    },
+    {
+      "id": 1002,
+      "saleNumber": "SALE-20250603-002",
+      "items": [
+        {
+          "id": 2,
+          "name": "Bukë Integrale",
+          "price": 3.50,
+          "quantity": 1,
+          "confidence": 0.94
+        },
+        {
+          "id": 4,
+          "name": "Mafin me Boronicë",
+          "price": 2.25,
+          "quantity": 2,
+          "confidence": 0.91
+        }
+      ],
+      "subtotal": 8.00,
+      "tax": 1.60,
+      "total": 9.60,
+      "timestamp": "2025-06-03T08:32:15.000Z",
+      "employee": "Ana Hoxha",
+      "shiftId": 301
+    },
+    {
+      "id": 1003,
+      "saleNumber": "SALE-20250603-003",
+      "items": [
+        {
+          "id": 5,
+          "name": "Torte Çokollatë",
+          "price": 4.50,
+          "quantity": 1,
+          "confidence": 0.88
+        },
+        {
+          "id": 1,
+          "name": "Kroasan me Vaj",
+          "price": 2.50,
+          "quantity": 1,
+          "confidence": 0.95
+        }
+      ],
+      "subtotal": 7.00,
+      "tax": 1.40,
+      "total": 8.40,
+      "timestamp": "2025-06-03T09:05:45.000Z",
+      "employee": "Ana Hoxha",
+      "shiftId": 301
+    },
+    {
+      "id": 1004,
+      "saleNumber": "SALE-20250603-004",
+      "items": [
+        {
+          "id": 8,
+          "name": "Baguette Franceze",
+          "price": 3.00,
+          "quantity": 2,
+          "confidence": 0.93
+        },
+        {
+          "id": 6,
+          "name": "Pretzel i Kripur",
+          "price": 2.00,
+          "quantity": 1,
+          "confidence": 0.87
+        }
+      ],
+      "subtotal": 8.00,
+      "tax": 1.60,
+      "total": 9.60,
+      "timestamp": "2025-06-03T09:28:20.000Z",
+      "employee": "Ana Hoxha",
+      "shiftId": 301
+    },
+    {
+      "id": 1005,
+      "saleNumber": "SALE-20250603-005",
+      "items": [
+        {
+          "id": 7,
+          "name": "Danish me Mollë",
+          "price": 3.25,
+          "quantity": 2,
+          "confidence": 0.90
+        },
+        {
+          "id": 3,
+          "name": "Biskota me Çokollatë",
+          "price": 1.75,
+          "quantity": 4,
+          "confidence": 0.92
+        }
+      ],
+      "subtotal": 13.50,
+      "tax": 2.70,
+      "total": 16.20,
+      "timestamp": "2025-06-03T10:12:10.000Z",
+      "employee": "Marko Nikolli",
+      "shiftId": 302
+    },
+    {
+      "id": 1006,
+      "saleNumber": "SALE-20250603-006",
+      "items": [
+        {
+          "id": 1,
+          "name": "Kroasan me Vaj",
+          "price": 2.50,
+          "quantity": 3,
+          "confidence": 0.91
+        },
+        {
+          "id": 4,
+          "name": "Mafin me Boronicë",
+          "price": 2.25,
+          "quantity": 1,
+          "confidence": 0.89
+        },
+        {
+          "id": 2,
+          "name": "Bukë Integrale", 
+          "price": 3.50,
+          "quantity": 1,
+          "confidence": 0.92
+        }
+      ],
+      "subtotal": 13.25,
+      "tax": 2.65,
+      "total": 15.90,
+      "timestamp": "2025-06-03T10:45:35.000Z",
+      "employee": "Marko Nikolli",
+      "shiftId": 302
+    }
+  ],
+  "shifts": [
+    {
+      "id": 301,
+      "employeeName": "Ana Hoxha",
+      "employeeId": "EMP001",
+      "startTime": "2025-06-03T08:00:00.000Z",
+      "endTime": "2025-06-03T12:00:00.000Z",
+      "totalSales": 39.90,
+      "totalTransactions": 4,
+      "totalItems": 9,
+      "breaks": [
+        {
+          "startTime": "2025-06-03T10:00:00.000Z",
+          "endTime": "2025-06-03T10:15:00.000Z",
+          "duration": 15
+        }
+      ],
+      "notes": "Ndërrim i mëngjesit - shumë klientë"
+    },
+    {
+      "id": 302,
+      "employeeName": "Marko Nikolli",
+      "employeeId": "EMP002",
+      "startTime": "2025-06-03T10:00:00.000Z",
+      "endTime": null,
+      "totalSales": 32.10,
+      "totalTransactions": 2,
+      "totalItems": 8,
+      "breaks": [],
+      "notes": "Ndërrim aktual - duke vazhduar"
+    }
+  ],
+  "analytics": {
+    "daily": {
+      "date": "2025-06-03",
+      "totalRevenue": 72.00,
+      "totalSales": 6,
+      "totalItems": 17,
+      "averageSale": 12.00,
+      "topProducts": [
+        {
+          "name": "Kroasan me Vaj",
+          "quantity": 6,
+          "revenue": 15.00
+        },
+        {
+          "name": "Biskota me Çokollatë",
+          "quantity": 7,
+          "revenue": 12.25
+        },
+        {
+          "name": "Bukë Integrale",
+          "quantity": 2,
+          "revenue": 7.00
+        }
+      ],
+      "peakHour": {
+        "hour": 10,
+        "revenue": 32.10,
+        "transactions": 2
+      }
+    }
+  },
+  "settings": {
+    "currency": "EUR",
+    "taxRate": 0.20,
+    "timezone": "Europe/Tirane",
+    "language": "sq",
+    "aiConfidenceThreshold": 0.75,
+    "autoPrint": true,
+    "cloudBackupEnabled": false,
+    "printerType": "thermal"
+  },
+  "metadata": {
+    "generatedBy": "Bakery Scanner Demo Data Generator",
+    "purpose": "Testing and demonstration of system capabilities",
+    "instructions": {
+      "howToImport": [
+        "1. Open the Bakery Scanner application",
+        "2. Go to Settings → Data Management",
+        "3. Click 'Importo të Dhënat'",
+        "4. Select this demo-data.json file",
+        "5. Confirm the import",
+        "6. Explore the imported products and sales data"
+      ],
+      "whatToExpect": [
+        "8 sample bakery products with training data",
+        "6 sample sales transactions from today",
+        "2 employee shifts (one completed, one active)",
+        "Analytics data showing business performance",
+        "Realistic Albanian bakery business scenario"
+      ],
+      "nextSteps": [
+        "Test the scanning interface with imported products",
+        "Review the sales analytics dashboard",
+        "Explore the shift management features",
+        "Try adding your own products and sales",
+        "Configure the system for your business"
+      ]
+    },
+    "notes": [
+      "This is sample data for demonstration purposes only",
+      "All employee names, addresses, and business details are fictional",
+      "Product prices are examples and may not reflect real market values",
+      "AI training data (photos) are not included - you'll need to train with real photos",
+      "Sales data represents a typical morning at a busy Albanian bakery"
+    ]
+  }
+}

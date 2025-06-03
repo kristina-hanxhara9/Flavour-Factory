@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#8B4513">
+    <title>Skaneri i Furrës - Sistemi AI për Furrat</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Skaneri i Furrës">
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@latest/dist/mobilenet.min.js"></script>
+    
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@latest/dist/chart.umd.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google APIs for Cloud Backup -->
+    <script src="https://apis.google.com/js/api.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="bakery-loader">
+            <div class="bread-icon">🥖</div>
+            <h2>Duke u ngarkuar...</h2>
+            <div class="loader-bar">
+                <div class="loader-progress"></div>
+            </div>
+            <p id="loadingStatus">Duke inicializuar sistemin AI...</p>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>🥐 Skaneri i Furrës</h1>
+            <div class="employee-status" id="employeeStatus">
+                <span class="material-icons">person</span>
+                <span id="currentEmployee">Asnjë punonjës</span>
+                <button id="switchEmployee" class="btn btn-small">
+                    <span class="material-icons">swap_horiz</span>
+                    Ndrysho
+                </button>
+            </div>
+            <div class="header-actions">
+                <button id="themeToggle" class="icon-btn" title="Ndrysho temën">
+                    <span class="material-icons">brightness_6</span>
+                </button>
+                <button id="fullscreenToggle" class="icon-btn" title="Ekran i plotë">
+                    <span class="material-icons">fullscreen</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tab-navigation">
+            <button class="tab-btn active" data-tab="scanner">
+                <span class="material-icons">qr_code_scanner</span>
+                <span>Skaneri</span>
+            </button>
+            <button class="tab-btn" data-tab="training">
+                <span class="material-icons">model_training</span>
+                <span>Trajnimi</span>
+            </button>
+            <button class="tab-btn" data-tab="products">
+                <span class="material-icons">inventory_2</span>
+                <span>Produktet</span>
+            </button>
+            <button class="tab-btn" data-tab="sales">
+                <span class="material-icons">point_of_sale</span>
+                <span>Shitjet</span>
+            </button>
+            <button class="tab-btn" data-tab="settings">
+                <span class="material-icons">settings</span>
+                <span>Cilësimet</span>
+            </button>
+        </nav>
+
+        <!-- Tab Content -->
+        <main class="tab-content">
+            <!-- Scanner Tab -->
+            <div id="scannerTab" class="tab-pane active">
+                <div class="scanner-layout">
+                    <!-- Camera View -->
+                    <div class="camera-section">
+                        <div class="camera-container">
+                            <video id="cameraPreview" autoplay playsinline></video>
+                            <canvas id="cameraCanvas"></canvas>
+                            <div id="scanOverlay" class="scan-overlay">
+                                <div class="scan-frame"></div>
+                                <div class="confidence-meter">
+                                    <div class="confidence-bar">
+                                        <div id="confidenceLevel" class="confidence-fill"></div>
+                                    </div>
+                                    <span id="confidenceText">0%</span>
+                                </div>
+                            </div>
+                            <div id="productDetected" class="product-detected hidden">
+                                <h3 id="detectedName"></h3>
+                                <p id="detectedPrice"></p>
+                                <button id="addToCartBtn" class="btn btn-primary">
+                                    <span class="material-icons">add_shopping_cart</span>
+                                    Shto në shportë
+                                </button>
+                            </div>
+                        </div>
+                        <div class="camera-controls">
+                            <button id="cameraToggle" class="btn btn-secondary">
+                                <span class="material-icons">camera_rear</span>
+                                Ndrysho kamerën
+                            </button>
+                            <button id="manualScan" class="btn btn-secondary">
+                                <span class="material-icons">center_focus_weak</span>
+                                Skano manualisht
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Shopping Cart -->
+                    <div class="cart-section">
+                        <h2>🛒 Shporta Aktuale</h2>
+                        <div id="cartItems" class="cart-items">
+                            <p class="empty-cart">Shporta është bosh</p>
+                        </div>
+                        <div class="cart-summary">
+                            <div class="summary-row">
+                                <span>Nën-total:</span>
+                                <span id="subtotal">0.00 Lek</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>TVSH (20%):</span>
+                                <span id="tax">0.00 Lek</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total:</span>
+                                <span id="total">0.00 Lek</span>
+                            </div>
+                            <button id="checkoutBtn" class="btn btn-success btn-large" disabled>
+                                <span class="material-icons">receipt</span>
+                                Përfundo shitjen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Training Tab -->
+            <div id="trainingTab" class="tab-pane">
+                <div class="training-layout">
+                    <!-- Training Mode Toggle -->
+                    <div class="training-mode-toggle">
+                        <button class="mode-btn active" data-mode="single">
+                            <span class="material-icons">photo_camera</span>
+                            Trajnim i thjeshtë
+                        </button>
+                        <button class="mode-btn" data-mode="bulk">
+                            <span class="material-icons">folder</span>
+                            Trajnim në grup
+                        </button>
+                    </div>
+
+                    <!-- Single Training Mode -->
+                    <div id="singleTraining" class="training-mode active">
+                        <div class="training-card">
+                            <h2>🎓 Trajno Produkt të Ri</h2>
+                            <form id="singleTrainingForm" class="training-form">
+                                <div class="form-group">
+                                    <label for="productName">Emri i produktit:</label>
+                                    <input type="text" id="productName" required placeholder="p.sh. Byrek me spinaq">
+                                </div>
+                                <div class="form-group">
+                                    <label for="productPrice">Çmimi (Lek):</label>
+                                    <input type="number" id="productPrice" required step="10" min="0" placeholder="p.sh. 150">
+                                </div>
+                                <div class="form-group">
+                                    <label for="productCategory">Kategoria:</label>
+                                    <select id="productCategory" required>
+                                        <option value="">Zgjidh kategorinë</option>
+                                        <option value="byrek">Byrekë</option>
+                                        <option value="bukë">Bukë</option>
+                                        <option value="ëmbëlsira">Ëmbëlsira</option>
+                                        <option value="torta">Torta</option>
+                                        <option value="kafe">Kafe & Pije</option>
+                                        <option value="të tjera">Të tjera</option>
+                                    </select>
+                                </div>
+                                <div class="photo-upload-area">
+                                    <input type="file" id="productPhotos" accept="image/*" multiple hidden>
+                                    <div id="photoDropZone" class="drop-zone">
+                                        <span class="material-icons">cloud_upload</span>
+                                        <p>Kliko ose tërhiq fotot këtu</p>
+                                        <small>Rekomandohen 10-20 foto nga kënde të ndryshme</small>
+                                    </div>
+                                    <div id="photoPreview" class="photo-preview"></div>
+                                </div>
+                                <div id="trainingProgress" class="training-progress hidden">
+                                    <div class="progress-bar">
+                                        <div id="progressFill" class="progress-fill"></div>
+                                    </div>
+                                    <p id="progressText">Duke trajnuar AI...</p>
+                                </div>
+                                <button type="submit" id="trainBtn" class="btn btn-primary" disabled>
+                                    <span class="material-icons">school</span>
+                                    Fillo trajnimin
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Bulk Training Mode -->
+                    <div id="bulkTraining" class="training-mode">
+                        <div class="training-card">
+                            <h2>📦 Trajnim në Grup</h2>
+                            <div class="bulk-options">
+                                <div class="option-card">
+                                    <h3>📁 Ngarko dosje</h3>
+                                    <p>Çdo nën-dosje = një produkt</p>
+                                    <input type="file" id="folderUpload" webkitdirectory directory multiple hidden>
+                                    <button class="btn btn-secondary" onclick="document.getElementById('folderUpload').click()">
+                                        <span class="material-icons">folder_open</span>
+                                        Zgjidh dosjen
+                                    </button>
+                                </div>
+                                <div class="option-card">
+                                    <h3>📊 Importo CSV</h3>
+                                    <p>Lista e produkteve + fotot</p>
+                                    <input type="file" id="csvUpload" accept=".csv" hidden>
+                                    <button class="btn btn-secondary" onclick="document.getElementById('csvUpload').click()">
+                                        <span class="material-icons">upload_file</span>
+                                        Ngarko CSV
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="bulkPreview" class="bulk-preview hidden">
+                                <h3>Produktet e gjetura:</h3>
+                                <div id="bulkProductList" class="bulk-product-list"></div>
+                                <div id="bulkProgress" class="bulk-progress">
+                                    <div class="overall-progress">
+                                        <span>Progresi total:</span>
+                                        <div class="progress-bar">
+                                            <div id="bulkProgressFill" class="progress-fill"></div>
+                                        </div>
+                                        <span id="bulkProgressText">0/0</span>
+                                    </div>
+                                    <div id="currentProduct" class="current-product"></div>
+                                </div>
+                                <button id="startBulkTraining" class="btn btn-primary btn-large">
+                                    <span class="material-icons">play_arrow</span>
+                                    Fillo trajnimin në grup
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Tab -->
+            <div id="productsTab" class="tab-pane">
+                <div class="products-header">
+                    <h2>📋 Menaxhimi i Produkteve</h2>
+                    <div class="product-actions">
+                        <input type="text" id="productSearch" placeholder="Kërko produkte..." class="search-input">
+                        <button id="exportProducts" class="btn btn-secondary">
+                            <span class="material-icons">download</span>
+                            Eksporto
+                        </button>
+                        <button id="importProducts" class="btn btn-secondary">
+                            <span class="material-icons">upload</span>
+                            Importo
+                        </button>
+                    </div>
+                </div>
+                <div id="productList" class="product-list">
+                    <!-- Products will be dynamically loaded here -->
+                </div>
+            </div>
+
+            <!-- Sales Tab -->
+            <div id="salesTab" class="tab-pane">
+                <div class="sales-dashboard">
+                    <!-- Today's Summary -->
+                    <div class="summary-cards">
+                        <div class="summary-card">
+                            <span class="material-icons">attach_money</span>
+                            <h3>Shitjet e sotme</h3>
+                            <p id="todayRevenue" class="metric">0 Lek</p>
+                        </div>
+                        <div class="summary-card">
+                            <span class="material-icons">shopping_basket</span>
+                            <h3>Artikuj të shitur</h3>
+                            <p id="todayItems" class="metric">0</p>
+                        </div>
+                        <div class="summary-card">
+                            <span class="material-icons">receipt_long</span>
+                            <h3>Transaksione</h3>
+                            <p id="todayTransactions" class="metric">0</p>
+                        </div>
+                        <div class="summary-card">
+                            <span class="material-icons">trending_up</span>
+                            <h3>Mesatarja</h3>
+                            <p id="avgTransaction" class="metric">0 Lek</p>
+                        </div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="charts-section">
+                        <div class="chart-container">
+                            <h3>Shitjet sipas orës</h3>
+                            <canvas id="hourlyChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Produktet më të shitura</h3>
+                            <canvas id="topProductsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Analytics -->
+                    <div class="analytics-section">
+                        <h3>📊 Analiza e Avancuar</h3>
+                        <div class="analytics-grid">
+                            <!-- Revenue Forecast -->
+                            <div class="analytics-card">
+                                <h4>Parashikimi i të Ardhurave (30 ditë)</h4>
+                                <canvas id="forecastChart"></canvas>
+                                <p class="forecast-info">
+                                    Parashikim: <strong id="forecastTotal">0 Lek</strong><br>
+                                    Saktësia: <span id="forecastAccuracy">0%</span>
+                                </p>
+                            </div>
+                            
+                            <!-- Employee Performance -->
+                            <div class="analytics-card">
+                                <h4>Performanca e Punonjësve</h4>
+                                <canvas id="employeeChart"></canvas>
+                                <button id="viewEmployeeDetails" class="btn btn-secondary mt-2">
+                                    <span class="material-icons">analytics</span>
+                                    Detaje të plota
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sales History -->
+                    <div class="sales-history">
+                        <h3>Historiku i shitjeve</h3>
+                        <div class="history-filters">
+                            <input type="date" id="salesDateFilter" class="date-filter">
+                            <select id="employeeFilter" class="employee-filter">
+                                <option value="">Të gjithë punonjësit</option>
+                            </select>
+                            <button id="exportSales" class="btn btn-secondary">
+                                <span class="material-icons">file_download</span>
+                                Eksporto raport
+                            </button>
+                        </div>
+                        <div id="salesTable" class="sales-table">
+                            <!-- Sales records will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settingsTab" class="tab-pane">
+                <div class="settings-layout">
+                    <div class="settings-section">
+                        <h2>⚙️ Cilësimet e Aplikacionit</h2>
+                        
+                        <!-- Business Info -->
+                        <div class="settings-card">
+                            <h3>🏪 Informacioni i biznesit</h3>
+                            <form id="businessInfoForm">
+                                <div class="form-group">
+                                    <label for="businessName">Emri i furrës:</label>
+                                    <input type="text" id="businessName" placeholder="Furra ime">
+                                </div>
+                                <div class="form-group">
+                                    <label for="businessAddress">Adresa:</label>
+                                    <textarea id="businessAddress" rows="2" placeholder="Rruga, Qyteti"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="businessPhone">Telefoni:</label>
+                                    <input type="tel" id="businessPhone" placeholder="+355 XX XXX XXXX">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Ruaj ndryshimet</button>
+                            </form>
+                        </div>
+
+                        <!-- Camera Settings -->
+                        <div class="settings-card">
+                            <h3>📸 Cilësimet e kamerës</h3>
+                            <div class="settings-options">
+                                <label class="switch-label">
+                                    <input type="checkbox" id="autoFocus" checked>
+                                    <span class="switch"></span>
+                                    Auto-fokus
+                                </label>
+                                <label class="switch-label">
+                                    <input type="checkbox" id="flashEnabled">
+                                    <span class="switch"></span>
+                                    Aktivizo flash
+                                </label>
+                                <label class="switch-label">
+                                    <input type="checkbox" id="continuousScan" checked>
+                                    <span class="switch"></span>
+                                    Skanim i vazhdueshëm
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Data Management -->
+                        <div class="settings-card">
+                            <h3>💾 Menaxhimi i të dhënave</h3>
+                            <div class="data-stats">
+                                <p>Modele të trajnuara: <span id="modelCount">0</span></p>
+                                <p>Hapësira e përdorur: <span id="storageUsed">0 MB</span></p>
+                            </div>
+                            <div class="data-actions">
+                                <button id="backupData" class="btn btn-secondary">
+                                    <span class="material-icons">backup</span>
+                                    Backup të dhënat
+                                </button>
+                                <button id="restoreData" class="btn btn-secondary">
+                                    <span class="material-icons">restore</span>
+                                    Rikthe të dhënat
+                                </button>
+                                <button id="clearData" class="btn btn-danger">
+                                    <span class="material-icons">delete_forever</span>
+                                    Fshi të gjitha të dhënat
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Employee Management -->
+                        <div class="settings-card">
+                            <h3>👥 Menaxhimi i Punonjësve</h3>
+                            <div id="employeeList" class="employee-list">
+                                <!-- Employees will be loaded here -->
+                            </div>
+                            <button id="addEmployee" class="btn btn-primary">
+                                <span class="material-icons">person_add</span>
+                                Shto punonjës
+                            </button>
+                            <button id="viewShifts" class="btn btn-secondary">
+                                <span class="material-icons">schedule</span>
+                                Shiko turnet
+                            </button>
+                        </div>
+
+                        <!-- Printer Settings -->
+                        <div class="settings-card">
+                            <h3>🖨️ Printer Termik</h3>
+                            <div class="printer-status">
+                                <p>Statusi: <span id="printerStatus">I palidhur</span></p>
+                            </div>
+                            <button id="connectPrinter" class="btn btn-primary">
+                                <span class="material-icons">bluetooth</span>
+                                Lidh Printer Bluetooth
+                            </button>
+                            <button id="testPrint" class="btn btn-secondary" disabled>
+                                <span class="material-icons">print</span>
+                                Test Print
+                            </button>
+                        </div>
+
+                        <!-- Cloud Backup -->
+                        <div class="settings-card">
+                            <h3>☁️ Cloud Backup (Google Drive - FALAS)</h3>
+                            <div class="backup-info">
+                                <p>Backup automatik: <span id="autoBackupStatus">Joaktiv</span></p>
+                                <p>Backup i fundit: <span id="lastBackupTime">Asnjëherë</span></p>
+                                <p><strong>Kosto: 0 Lek/muaj (15GB falas)</strong></p>
+                            </div>
+                            <button id="setupCloudBackup" class="btn btn-primary">
+                                <span class="material-icons">cloud_upload</span>
+                                Konfiguro Google Drive
+                            </button>
+                            <button id="manualBackup" class="btn btn-secondary">
+                                <span class="material-icons">backup</span>
+                                Backup tani
+                            </button>
+                            <label class="switch-label">
+                                <input type="checkbox" id="autoBackup">
+                                <span class="switch"></span>
+                                Backup automatik (çdo 24 orë)
+                            </label>
+                        </div>
+
+                        <!-- App Info -->
+                        <div class="settings-card">
+                            <h3>ℹ️ Rreth aplikacionit</h3>
+                            <p>Versioni: 1.0.0 Enterprise</p>
+                            <p>Zhvilluar nga: Bakery AI Systems</p>
+                            <p>Teknologjia: TensorFlow.js, PWA, Cloud</p>
+                            <button id="checkUpdates" class="btn btn-secondary">
+                                <span class="material-icons">update</span>
+                                Kontrollo për përditësime
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div id="receiptModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Fatura</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div id="receiptContent" class="receipt-content">
+                <!-- Receipt will be generated here -->
+            </div>
+            <div class="modal-actions">
+                <button id="printReceipt" class="btn btn-primary">
+                    <span class="material-icons">print</span>
+                    Printo
+                </button>
+                <button id="newSale" class="btn btn-secondary">
+                    <span class="material-icons">add_circle</span>
+                    Shitje e re
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="ml-engine.js"></script>
+    <script src="camera-handler.js"></script>
+    <script src="bulk-trainer.js"></script>
+    <script src="analytics.js"></script>
+    <script src="enterprise-features.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.error('Service Worker registration failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>

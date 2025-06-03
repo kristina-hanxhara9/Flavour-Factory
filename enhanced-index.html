@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistemi i Skanimit për Furra - Pro Version</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="enhanced-styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    
+    <!-- Icons -->
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Enhanced Header -->
+        <header class="header">
+            <h1>🥖 Sistemi i Skanimit për Furra - Pro</h1>
+            <div class="header-info">
+                <span id="product-count">0 produkte të trajnuara</span>
+                <span id="current-date"></span>
+                <div id="shift-info" class="shift-info">
+                    <span class="no-shift">🔴 Asnjë ndërrim aktiv</span>
+                </div>
+                <div id="cloud-status" class="cloud-status">
+                    <span class="cloud-offline">☁️ Offline</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Enhanced Navigation -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="scan">
+                📷 Skanimi
+            </button>
+            <button class="tab-btn" data-tab="train">
+                🎓 Trajnimi
+            </button>
+            <button class="tab-btn" data-tab="products">
+                📦 Produktet
+            </button>
+            <button class="tab-btn" data-tab="sales">
+                💰 Shitjet
+            </button>
+            <button class="tab-btn" data-tab="shifts">
+                👥 Ndërrimet
+            </button>
+            <button class="tab-btn" data-tab="analytics">
+                📊 Analitika
+            </button>
+            <button class="tab-btn" data-tab="settings">
+                ⚙️ Cilësimet
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Scanning Tab (Enhanced) -->
+            <div id="scan-tab" class="tab-content active">
+                <div class="scan-section">
+                    <div class="camera-container">
+                        <video id="camera" autoplay playsinline></video>
+                        <canvas id="capture-canvas" style="display:none;"></canvas>
+                        <div class="camera-overlay">
+                            <div class="scan-frame"></div>
+                            <p class="scan-instruction">Vendose produktin në kornizë dhe kliko "Skano"</p>
+                            <div id="ai-indicator" class="ai-indicator" style="display:none;">
+                                🤖 AI Aktiv
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scan-controls">
+                        <button id="start-camera" class="btn btn-primary">
+                            📹 Hap Kamerën
+                        </button>
+                        <button id="capture-btn" class="btn btn-success" style="display:none;">
+                            📸 Skano Produktin
+                        </button>
+                        <button id="stop-camera" class="btn btn-secondary" style="display:none;">
+                            ⏹️ Mbyll Kamerën
+                        </button>
+                    </div>
+
+                    <!-- Enhanced Recognition Result -->
+                    <div id="recognition-result" class="recognition-result" style="display:none;">
+                        <h3>Produkti i Identifikuar nga AI:</h3>
+                        <div class="product-card">
+                            <div class="product-info">
+                                <h4 id="recognized-name">-</h4>
+                                <p id="recognized-price">0.00€</p>
+                                <p class="confidence">Siguria AI: <span id="confidence-score">0%</span></p>
+                                <p class="ai-model">Model: <span id="model-type">TensorFlow.js</span></p>
+                            </div>
+                            <div class="product-actions">
+                                <button id="add-to-sale" class="btn btn-success">➕ Shto në Shitje</button>
+                                <button id="scan-again" class="btn btn-secondary">🔄 Skano Përsëri</button>
+                                <button id="print-single" class="btn btn-info">🖨️ Printo Etiketë</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Current Sale -->
+                    <div class="current-sale">
+                        <div class="sale-header">
+                            <h3>Shitja Aktuale:</h3>
+                            <div class="sale-controls">
+                                <button id="print-receipt" class="btn btn-info" style="display:none;">
+                                    🖨️ Printo Faturë
+                                </button>
+                                <button id="save-draft" class="btn btn-warning" style="display:none;">
+                                    💾 Ruaj Draft
+                                </button>
+                            </div>
+                        </div>
+                        <div id="sale-items" class="sale-items">
+                            <p class="empty-sale">Asnjë produkt i shtuar akoma</p>
+                        </div>
+                        <div class="sale-summary">
+                            <div class="sale-stats">
+                                <span>Produkte: <span id="items-count">0</span></span>
+                                <span>TVSH (20%): <span id="tax-amount">0.00€</span></span>
+                            </div>
+                            <div class="sale-total">
+                                <strong>Totali: <span id="sale-total">0.00€</span></strong>
+                            </div>
+                        </div>
+                        <button id="complete-sale" class="btn btn-primary btn-large" style="display:none;">
+                            ✅ Përfundo Shitjen
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Training Tab -->
+            <div id="train-tab" class="tab-content">
+                <div class="training-section">
+                    <h2>Trajno Produktet me AI të Vërtetë</h2>
+                    <div class="ai-info">
+                        <p>🤖 Sistemi përdor TensorFlow.js dhe Transfer Learning për trajnim të saktë</p>
+                        <p>📸 Rekomandon minimum 15-20 foto për produkt për saktësi maksimale</p>
+                    </div>
+
+                    <div class="product-form">
+                        <input type="text" id="product-name" placeholder="Emri i produktit (p.sh. Kroasan)" />
+                        <input type="number" id="product-price" placeholder="Çmimi (p.sh. 2.50)" step="0.01" />
+                        <select id="product-category">
+                            <option value="">Kategoria (opsionale)</option>
+                            <option value="bread">Bukë</option>
+                            <option value="pastry">Brumëra</option>
+                            <option value="cake">Torta</option>
+                            <option value="cookie">Biskota</option>
+                            <option value="other">Të tjera</option>
+                        </select>
+                        <textarea id="product-description" placeholder="Përshkrimi (opsional)"></textarea>
+                    </div>
+
+                    <div class="photo-upload">
+                        <div class="upload-area" id="upload-area">
+                            <div class="upload-text">
+                                <h3>📸 Shto Fotot për AI Training</h3>
+                                <p>Zvarrit foton këtu ose kliko për të zgjedhur</p>
+                                <p class="upload-hint">Shto së paku 15 foto nga këndvështrime të ndryshme</p>
+                                <div class="upload-tips">
+                                    <small>💡 Këshilla: Foto të qarta, drita e mirë, këndvështrime të ndryshme</small>
+                                </div>
+                            </div>
+                            <input type="file" id="photo-input" multiple accept="image/*" style="display:none;">
+                        </div>
+                        
+                        <div id="photo-preview" class="photo-preview"></div>
+                        
+                        <div class="training-options">
+                            <label>
+                                <input type="checkbox" id="data-augmentation" checked>
+                                Përdor Data Augmentation (rrit saktësinë)
+                            </label>
+                            <label>
+                                <input type="checkbox" id="advanced-training" checked>
+                                Trajnim i Avancuar (më i ngadaltë por më i saktë)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="training-controls">
+                        <button id="train-model" class="btn btn-primary btn-large" disabled>
+                            🤖 Fillo AI Training
+                        </button>
+                        <div id="training-progress" class="training-progress" style="display:none;">
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div id="progress-fill" class="progress-fill"></div>
+                                </div>
+                                <div class="progress-details">
+                                    <span id="progress-text">Trajnimi në progres...</span>
+                                    <span id="progress-percentage">0%</span>
+                                </div>
+                            </div>
+                            <div class="training-metrics">
+                                <div class="metric">
+                                    <label>Accuracy:</label>
+                                    <span id="training-accuracy">-</span>
+                                </div>
+                                <div class="metric">
+                                    <label>Loss:</label>
+                                    <span id="training-loss">-</span>
+                                </div>
+                                <div class="metric">
+                                    <label>ETA:</label>
+                                    <span id="training-eta">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Tab (same as before) -->
+            <div id="products-tab" class="tab-content">
+                <div class="products-section">
+                    <h2>Produktet e Trajnuara</h2>
+                    <div class="products-controls">
+                        <button id="export-products" class="btn btn-secondary">📤 Eksporto Produktet</button>
+                        <button id="import-products" class="btn btn-secondary">📥 Importo Produktet</button>
+                        <input type="file" id="import-file" accept=".json" style="display:none;">
+                    </div>
+                    <div id="products-list" class="products-list">
+                        <p class="empty-products">Asnjë produkt i trajnuar akoma. Shko te "Trajnimi" për të shtuar produkte.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Tab (same as before) -->
+            <div id="sales-tab" class="tab-content">
+                <div class="sales-section">
+                    <h2>Shitjet e Sotme</h2>
+                    <div class="sales-summary">
+                        <div class="summary-card">
+                            <h3>Totali i Ditës</h3>
+                            <p id="daily-total" class="summary-amount">0.00€</p>
+                        </div>
+                        <div class="summary-card">
+                            <h3>Numri i Shitjeve</h3>
+                            <p id="daily-sales-count" class="summary-count">0</p>
+                        </div>
+                        <div class="summary-card">
+                            <h3>Produktet e Shitura</h3>
+                            <p id="daily-items-count" class="summary-count">0</p>
+                        </div>
+                    </div>
+                    <div class="sales-controls">
+                        <button id="export-sales" class="btn btn-secondary">📤 Eksporto Shitjet</button>
+                        <button id="print-daily-report" class="btn btn-info">🖨️ Printo Raportin Ditor</button>
+                    </div>
+                    <div id="sales-list" class="sales-list">
+                        <p class="empty-sales">Asnjë shitje sot</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW: Shifts Tab -->
+            <div id="shifts-tab" class="tab-content">
+                <div class="shifts-section">
+                    <h2>Menaxhimi i Ndërrimeve</h2>
+                    
+                    <div class="shift-controls">
+                        <div class="current-shift-status">
+                            <div id="shift-status-display" class="shift-status">
+                                <span class="status-indicator offline">🔴</span>
+                                <span>Asnjë ndërrim aktiv</span>
+                            </div>
+                        </div>
+                        
+                        <div class="shift-actions">
+                            <div class="employee-input">
+                                <input type="text" id="employee-name" placeholder="Emri i punonjësit" />
+                            </div>
+                            <button id="start-shift" class="btn btn-success">▶️ Fillo Ndërrimin</button>
+                            <button id="end-shift" class="btn btn-danger" style="display:none;">⏹️ Përfundo Ndërrimin</button>
+                            <button id="shift-break" class="btn btn-warning" style="display:none;">⏸️ Pushim</button>
+                        </div>
+                    </div>
+
+                    <div class="shift-summary" id="active-shift-summary" style="display:none;">
+                        <h3>Ndërrimi Aktual</h3>
+                        <div class="shift-stats">
+                            <div class="stat">
+                                <label>Punonjësi:</label>
+                                <span id="current-employee">-</span>
+                            </div>
+                            <div class="stat">
+                                <label>Filloi:</label>
+                                <span id="shift-start-time">-</span>
+                            </div>
+                            <div class="stat">
+                                <label>Kohëzgjatja:</label>
+                                <span id="shift-duration">-</span>
+                            </div>
+                            <div class="stat">
+                                <label>Shitjet:</label>
+                                <span id="shift-sales-count">0</span>
+                            </div>
+                            <div class="stat">
+                                <label>Totali:</label>
+                                <span id="shift-total">0.00€</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shifts-history">
+                        <h3>Historiku i Ndërrimeve</h3>
+                        <div class="history-controls">
+                            <button id="export-shifts" class="btn btn-secondary">📤 Eksporto Ndërrimet</button>
+                            <select id="shift-filter">
+                                <option value="today">Sot</option>
+                                <option value="week">Kjo javë</option>
+                                <option value="month">Ky muaj</option>
+                                <option value="all">Të gjitha</option>
+                            </select>
+                        </div>
+                        <div id="shifts-list" class="shifts-list">
+                            <p class="empty-shifts">Asnjë ndërrim i regjistruar</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW: Analytics Tab -->
+            <div id="analytics-tab" class="tab-content">
+                <div class="analytics-section">
+                    <h2>📊 Analitika e Avancuar</h2>
+                    
+                    <div class="analytics-controls">
+                        <select id="analytics-period">
+                            <option value="today">Sot</option>
+                            <option value="week">Kjo javë</option>
+                            <option value="month">Ky muaj</option>
+                            <option value="year">Ky vit</option>
+                        </select>
+                        <button id="generate-report" class="btn btn-primary">📋 Gjenero Raport</button>
+                        <button id="export-analytics" class="btn btn-secondary">📤 Eksporto Analizën</button>
+                    </div>
+
+                    <div class="analytics-dashboard">
+                        <!-- Revenue Analytics -->
+                        <div class="analytics-card">
+                            <h3>💰 Analiza e Të Ardhurave</h3>
+                            <div class="revenue-metrics">
+                                <div class="metric-box">
+                                    <label>Totali:</label>
+                                    <span id="analytics-total" class="metric-value">0.00€</span>
+                                </div>
+                                <div class="metric-box">
+                                    <label>Mesatarja Ditore:</label>
+                                    <span id="analytics-daily-avg" class="metric-value">0.00€</span>
+                                </div>
+                                <div class="metric-box">
+                                    <label>Rritja:</label>
+                                    <span id="analytics-growth" class="metric-value">0%</span>
+                                </div>
+                            </div>
+                            <div id="revenue-chart" class="chart-container">
+                                <canvas id="revenue-canvas"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Product Analytics -->
+                        <div class="analytics-card">
+                            <h3>📦 Analiza e Produkteve</h3>
+                            <div id="products-chart" class="chart-container">
+                                <div id="top-products" class="top-products-list"></div>
+                            </div>
+                        </div>
+
+                        <!-- Time Analytics -->
+                        <div class="analytics-card">
+                            <h3>⏰ Analiza e Kohës</h3>
+                            <div id="time-chart" class="chart-container">
+                                <div id="hourly-breakdown" class="hourly-breakdown"></div>
+                            </div>
+                            <div class="time-insights">
+                                <p><strong>Ora më e zënë:</strong> <span id="peak-hour">-</span></p>
+                                <p><strong>Ora më e qetë:</strong> <span id="quiet-hour">-</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Trend Analytics -->
+                        <div class="analytics-card">
+                            <h3>📈 Tendencat</h3>
+                            <div id="trends-chart" class="chart-container">
+                                <canvas id="trends-canvas"></canvas>
+                            </div>
+                            <div class="trend-insights">
+                                <div class="insight">
+                                    <label>Tendenca:</label>
+                                    <span id="trend-direction">-</span>
+                                </div>
+                                <div class="insight">
+                                    <label>Parashikimi:</label>
+                                    <span id="trend-prediction">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW: Settings Tab -->
+            <div id="settings-tab" class="tab-content">
+                <div class="settings-section">
+                    <h2>⚙️ Cilësimet e Sistemit</h2>
+                    
+                    <!-- Business Settings -->
+                    <div class="settings-card">
+                        <h3>🏢 Informacionet e Biznesit</h3>
+                        <div class="setting-group">
+                            <label for="business-name">Emri i Biznesit:</label>
+                            <input type="text" id="business-name" placeholder='Furra "Bukë e Freskët"' />
+                        </div>
+                        <div class="setting-group">
+                            <label for="business-address">Adresa:</label>
+                            <input type="text" id="business-address" placeholder="Rruga Kryesore, Tiranë" />
+                        </div>
+                        <div class="setting-group">
+                            <label for="business-phone">Telefoni:</label>
+                            <input type="text" id="business-phone" placeholder="+355 69 123 4567" />
+                        </div>
+                        <div class="setting-group">
+                            <label for="business-email">Email:</label>
+                            <input type="email" id="business-email" placeholder="info@furrabuke.al" />
+                        </div>
+                    </div>
+
+                    <!-- Cloud Backup Settings -->
+                    <div class="settings-card">
+                        <h3>☁️ Backup në Cloud</h3>
+                        <div class="setting-group">
+                            <label>
+                                <input type="checkbox" id="enable-cloud-backup">
+                                Aktivizo Backup Automatik në Cloud
+                            </label>
+                        </div>
+                        <div id="cloud-settings" style="display:none;">
+                            <div class="setting-group">
+                                <label for="cloud-provider">Shërbimi Cloud:</label>
+                                <select id="cloud-provider">
+                                    <option value="google">Google Drive</option>
+                                    <option value="dropbox">Dropbox</option>
+                                    <option value="firebase">Firebase</option>
+                                    <option value="aws">Amazon S3</option>
+                                    <option value="custom">Tjetër (Custom)</option>
+                                </select>
+                            </div>
+                            <div class="setting-group">
+                                <label for="cloud-api-key">API Key:</label>
+                                <input type="password" id="cloud-api-key" placeholder="Fut API Key" />
+                            </div>
+                            <div class="setting-group">
+                                <label for="backup-frequency">Frekuenca e Backup:</label>
+                                <select id="backup-frequency">
+                                    <option value="hourly">Çdo orë</option>
+                                    <option value="daily">Çdo ditë</option>
+                                    <option value="weekly">Çdo javë</option>
+                                </select>
+                            </div>
+                            <div class="cloud-actions">
+                                <button id="test-cloud-connection" class="btn btn-info">🔗 Testo Lidhjen</button>
+                                <button id="backup-now" class="btn btn-success">💾 Backup Tani</button>
+                                <button id="restore-from-cloud" class="btn btn-warning">📥 Rikupero nga Cloud</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Printer Settings -->
+                    <div class="settings-card">
+                        <h3>🖨️ Cilësimet e Printerit</h3>
+                        <div class="setting-group">
+                            <label>
+                                <input type="checkbox" id="enable-printing" checked>
+                                Aktivizo Printimin e Faturave
+                            </label>
+                        </div>
+                        <div id="printer-settings">
+                            <div class="setting-group">
+                                <label for="printer-type">Lloji i Printerit:</label>
+                                <select id="printer-type">
+                                    <option value="thermal">Printer Termik (80mm)</option>
+                                    <option value="inkjet">Printer Normal (A4)</option>
+                                    <option value="bluetooth">Printer Bluetooth</option>
+                                </select>
+                            </div>
+                            <div class="setting-group">
+                                <label>
+                                    <input type="checkbox" id="auto-print" checked>
+                                    Printo Automatikisht pas Shitjes
+                                </label>
+                            </div>
+                            <div class="printer-actions">
+                                <button id="test-printer" class="btn btn-info">🖨️ Testo Printerin</button>
+                                <button id="print-test-receipt" class="btn btn-secondary">📄 Printo Faturë Test</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Settings -->
+                    <div class="settings-card">
+                        <h3>🤖 Cilësimet e AI</h3>
+                        <div class="setting-group">
+                            <label for="ai-confidence-threshold">Niveli Minimal i Sigurisë (%):</label>
+                            <input type="range" id="ai-confidence-threshold" min="50" max="95" value="75" />
+                            <span id="confidence-value">75%</span>
+                        </div>
+                        <div class="setting-group">
+                            <label>
+                                <input type="checkbox" id="advanced-ai-features" checked>
+                                Aktivizo Karakteristikat e Avancuara AI
+                            </label>
+                        </div>
+                        <div class="setting-group">
+                            <label>
+                                <input type="checkbox" id="auto-retrain" checked>
+                                Ri-trajno Automatikisht Modelin
+                            </label>
+                        </div>
+                        <div class="ai-actions">
+                            <button id="reset-ai-model" class="btn btn-warning">🔄 Reseto AI Modelin</button>
+                            <button id="export-ai-model" class="btn btn-secondary">📤 Eksporto Modelin</button>
+                        </div>
+                    </div>
+
+                    <!-- Data Management -->
+                    <div class="settings-card">
+                        <h3>💾 Menaxhimi i të Dhënave</h3>
+                        <div class="data-stats">
+                            <div class="stat">
+                                <label>Produktet:</label>
+                                <span id="data-products-count">0</span>
+                            </div>
+                            <div class="stat">
+                                <label>Shitjet:</label>
+                                <span id="data-sales-count">0</span>
+                            </div>
+                            <div class="stat">
+                                <label>Ndërrimet:</label>
+                                <span id="data-shifts-count">0</span>
+                            </div>
+                            <div class="stat">
+                                <label>Madhësia:</label>
+                                <span id="data-size">0 MB</span>
+                            </div>
+                        </div>
+                        <div class="data-actions">
+                            <button id="export-all-data" class="btn btn-primary">📤 Eksporto të Gjitha të Dhënat</button>
+                            <button id="import-all-data" class="btn btn-secondary">📥 Importo të Dhënat</button>
+                            <button id="clear-old-data" class="btn btn-warning">🗑️ Fshi të Dhënat e Vjetra</button>
+                            <button id="reset-all-data" class="btn btn-danger">⚠️ Reseto Gjithçka</button>
+                        </div>
+                        <input type="file" id="import-all-file" accept=".json" style="display:none;">
+                    </div>
+
+                    <!-- Save Settings -->
+                    <div class="settings-actions">
+                        <button id="save-settings" class="btn btn-success btn-large">💾 Ruaj Cilësimet</button>
+                        <button id="reset-settings" class="btn btn-secondary">🔄 Kthe në Default</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Enhanced Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay" style="display:none;">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <p id="loading-text">Po ngarkohet...</p>
+                <div id="loading-progress" class="loading-progress" style="display:none;">
+                    <div class="progress-bar">
+                        <div id="loading-progress-fill" class="progress-fill"></div>
+                    </div>
+                    <span id="loading-percentage">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Messages -->
+        <div id="toast-container" class="toast-container"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="enhanced-script.js"></script>
+    <script>
+        // Initialize the enhanced app
+        let app;
+        document.addEventListener('DOMContentLoaded', () => {
+            app = new EnhancedBakeryScanner();
+        });
+
+        // Make app globally accessible
+        window.app = app;
+
+        // Register Service Worker for offline functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
